@@ -7,7 +7,7 @@ from modules.backend import process_outreach_one, process_outreach_two, convert_
 
 FRONT_PASSWORD = st.secrets["dialer_password"]
 
-st.set_page_config(page_title='Daily Dialer', page_icon="🔒", layout='centered')
+st.set_page_config(page_title='Daily Dialer', page_icon="☎️", layout='centered')
 
 hide_streamlit_style = """
     <style>
@@ -37,9 +37,11 @@ def front_door():
     
     with main_col_2:
         front_placeholder = st.empty()
-        front_placeholder.title(' ☘ « ※ » ♠🔒♠ « ※ » ☘')
+        img_placeholder = st.empty()
+        front_placeholder.title(' ☘ « ※ » ♠🅲♠ « ※ » ☘')
         ## AUTHENTICATION ##
-        placeholder = st.empty() 
+        placeholder = st.empty()
+        img_placeholder.image('https://cdn.dribbble.com/users/56941/screenshots/1078625/canary_logo_3.png')
         input_password = placeholder.text_input(' 🔑 :', value='', type='password')
         if input_password:
             if input_password == FRONT_PASSWORD:
@@ -47,6 +49,7 @@ def front_door():
                     
                 front_placeholder.empty()
                 placeholder.empty()
+                img_placeholder.empty()
             else:
                 placeholder.image('https://www.how-to-draw-funny-cartoons.com/image-files/cartoon-chair-6.gif')
                 session_state = False
@@ -59,6 +62,7 @@ def front_door():
 
 def home_page():
     st.title('« ※ » ☘ Canary - Dialer files ☘ « ※ » ')
+    
     st.image("https://marketbusinessnews.com/wp-content/uploads/2020/06/Auto-dialers-image-for-article-a-button-phone.jpg")
     st.info("See contact page if you need any help.")
     
@@ -115,9 +119,26 @@ def outreach_two_and_three():
     
 
 def contact_page():
-    st.title('Contact')
-    st.write('Email: vinicius.peron@canary.is')
-    st.warning('Further info coming soon.')
+    st.title('Contact: 📧')
+    table_info = {
+        'Email': ['vinicius.peron@canary.is'],
+        'Github/Source Code': ['https://github.com/VPeron/daily_dialer'],
+        
+    }
+    st.table(table_info)
+    
+    
+def about_page():
+    st.title('About')
+    st.info("""Simple UI app to aid file formatting routine.\n
+Outreaches 1, 2 and 3 are available via sidebar menu.
+- Outreach 1 expects a .csv file from MODE where it will filter the respective data for the present day.
+- Outreaches 2 and 3 expect a .csv file from BabelForce containing a status column with the outcome of outreaches 1 and 2.\n
+A contact page is available for any help or suggestions.
+- Version 1.0
+- 01/02/2022
+""")
+    st.warning('Coming soon: fraud lists file formatter')
         
 
 def main():
@@ -127,9 +148,10 @@ def main():
         "Outreach 1": outreach_one,
         "Outreaches 2/3": outreach_two_and_three,
         "Contact": contact_page,
+        "About": about_page,
     }
     
-    page = st.sidebar.selectbox("Select your outreach", tuple(pages.keys()))
+    page = st.sidebar.radio("Select your outreach", tuple(pages.keys()))
     pages[page]()
     
     
