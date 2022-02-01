@@ -99,20 +99,22 @@ def outreach_one():
 def outreach_two_and_three():
     with st.container():
         st.title('OUTREACHES 2 & 3')
+        # 1- Select outreac (output file naming purposes only)
         outreach_option = st.selectbox('Chose outreach: ', [None, '2', '3'])
         if outreach_option is not None:
+            
+            # 2 - DROP CSV
             uploaded_file = st.file_uploader("Choose a CSV file", key="OR23")
-        
             if uploaded_file is not None:
                 raw_data = pd.read_csv(uploaded_file)
                 temp_data = process_outreach_two(raw_data)
-                # 2 - VIZ NEW DF
+                # 3 - VIZ NEW DF
                 st.write(temp_data)
 
-                # 3 - CONFIRM
+                # 4 - CONFIRM
                 confirm_process = st.button('Create file', key='confirm_processing_2')
                 if confirm_process:
-                    # 4 - DOWNLOAD PROCESSED FILE
+                    # 5 - DOWNLOAD PROCESSED FILE
                     csv = convert_df(temp_data)
                     st.download_button(
                         label="Download data as CSV",
@@ -145,7 +147,7 @@ Version 1.0\n
         
 
 def main():
-    # Register your pages
+    # Register pages
     pages = {
         "Homepage": home_page,
         "Outreach 1": outreach_one,
