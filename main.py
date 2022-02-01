@@ -6,6 +6,8 @@ from modules.backend import process_outreach_one, process_outreach_two, convert_
 
 
 FRONT_PASSWORD = st.secrets["dialer_password"]
+EMAIL_CONTACT = st.secrets['email_contact']
+# SOURCE_CODE = st.secrets["source_code"]
 
 st.set_page_config(page_title='Daily Dialer', page_icon="☎️", layout='centered')
 
@@ -16,7 +18,7 @@ hide_streamlit_style = """
         visibility:hidden;
     }
     footer:after {
-        content: 'Made For Canary';
+        content: 'Made For Canary ®️';
         visibility: visible;
         display: block;
         position: relative;
@@ -61,10 +63,12 @@ def front_door():
 
 
 def home_page():
-    st.title('« ※ » ☘ Canary - Dialer files ☘ « ※ » ')
     
-    st.image("https://marketbusinessnews.com/wp-content/uploads/2020/06/Auto-dialers-image-for-article-a-button-phone.jpg")
-    st.info("See contact page if you need any help.")
+    st.image('https://smarthomesolver.com/reviews/wp-content/uploads/2016/09/canary_transparent_logo-e1478312785944.png')
+    st.title('« ※ » Dialer Files « ※ »')
+    # st.image("https://marketbusinessnews.com/wp-content/uploads/2020/06/Auto-dialers-image-for-article-a-button-phone.jpg")
+    st.info("""Select the outreach from the sidebar menu.\n
+See About and Contact pages if you need any help.""")
     
 
 def outreach_one():
@@ -80,7 +84,7 @@ def outreach_one():
             st.write(temp_data)
 
             # 3 - CONFIRM
-            confirm_process = st.button('Process file', key='confirm_processing_1')
+            confirm_process = st.button('Create file', key='confirm_processing_1')
             if confirm_process:
                 # 4 - DOWNLOAD PROCESSED FILE
                 csv = convert_df(temp_data)
@@ -106,7 +110,7 @@ def outreach_two_and_three():
                 st.write(temp_data)
 
                 # 3 - CONFIRM
-                confirm_process = st.button('Process file', key='confirm_processing_2')
+                confirm_process = st.button('Create file', key='confirm_processing_2')
                 if confirm_process:
                     # 4 - DOWNLOAD PROCESSED FILE
                     csv = convert_df(temp_data)
@@ -121,8 +125,8 @@ def outreach_two_and_three():
 def contact_page():
     st.title('Contact: 📧')
     table_info = {
-        'Email': ['vinicius.peron@canary.is'],
-        'Github/Source Code': ['https://github.com/VPeron/daily_dialer'],
+        'Email': [EMAIL_CONTACT],
+        'Github/Source Code': ["https://github.com/VPeron/daily_dialer"],
         
     }
     st.table(table_info)
@@ -133,12 +137,11 @@ def about_page():
     st.info("""Simple UI app to aid file formatting routine.\n
 Outreaches 1, 2 and 3 are available via sidebar menu.
 - Outreach 1 expects a .csv file from MODE where it will filter the respective data for the present day.
-- Outreaches 2 and 3 expect a .csv file from BabelForce containing a status column with the outcome of outreaches 1 and 2.\n
-A contact page is available for any help or suggestions.
-- Version 1.0
-- 01/02/2022
+- Outreaches 2 and 3 expect a .csv file from BabelForce containing a status column with the outcome of outreaches 1 and 2, respectively.\n
+A contact page is available for any help or suggestions.\n
+Version 1.0\n
+01/02/2022\n
 """)
-    st.warning('Coming soon: fraud lists file formatter')
         
 
 def main():
@@ -147,11 +150,12 @@ def main():
         "Homepage": home_page,
         "Outreach 1": outreach_one,
         "Outreaches 2/3": outreach_two_and_three,
-        "Contact": contact_page,
         "About": about_page,
+        "Contact": contact_page,
+        
     }
     
-    page = st.sidebar.radio("Select your outreach", tuple(pages.keys()))
+    page = st.sidebar.radio("Menu", tuple(pages.keys()))
     pages[page]()
     
     
