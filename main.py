@@ -7,7 +7,7 @@ from modules.backend import process_outreach_one, process_outreach_two, convert_
 
 FRONT_PASSWORD = st.secrets["front_password"]
 EMAIL_CONTACT = st.secrets['email_contact']
-# SOURCE_CODE = st.secrets["source_code"]
+
 
 st.set_page_config(page_title='Daily Dialer', page_icon="☎️", layout='centered')
 
@@ -26,11 +26,15 @@ hide_streamlit_style = """
         padding: 5px;
         top: 2px;
     }
+    .st-at {
+    background-color: ##0E1117;
+    }
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 today_date = str(datetime.today())[:10]
+
 
 def front_door():
     session_state = False
@@ -64,10 +68,8 @@ def front_door():
 
 
 def home_page():
-    
     st.image('https://smarthomesolver.com/reviews/wp-content/uploads/2016/09/canary_transparent_logo-e1478312785944.png')
     st.title('« ※ » Dialer Files « ※ »')
-    # st.image("https://marketbusinessnews.com/wp-content/uploads/2020/06/Auto-dialers-image-for-article-a-button-phone.jpg")
     st.info("""Select the outreach from the sidebar menu.\n
 See About and Contact pages if you need any help.""")
     
@@ -83,7 +85,6 @@ def outreach_one():
             temp_data = process_outreach_one(raw_data)
             # 2 - VIZ NEW DF
             st.write(temp_data)
-
             # 3 - CONFIRM
             confirm_process = st.button('Create file', key='confirm_processing_1')
             if confirm_process:
@@ -100,10 +101,10 @@ def outreach_one():
 def outreach_two_and_three():
     with st.container():
         st.title('OUTREACHES 2 & 3')
-        # 1- Select outreac (output file naming purposes only)
+        
+        # 1- Select outreach (output file naming purposes only)
         outreach_option = st.selectbox('Chose outreach: ', [None, '2', '3'])
         if outreach_option is not None:
-            
             # 2 - DROP CSV
             uploaded_file = st.file_uploader("Choose a CSV file", key="OR23")
             if uploaded_file is not None:
@@ -111,7 +112,6 @@ def outreach_two_and_three():
                 temp_data = process_outreach_two(raw_data)
                 # 3 - VIZ NEW DF
                 st.write(temp_data)
-
                 # 4 - CONFIRM
                 confirm_process = st.button('Create file', key='confirm_processing_2')
                 if confirm_process:

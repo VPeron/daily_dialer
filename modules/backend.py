@@ -29,6 +29,8 @@ def process_outreach_one(df):
     else:
         df_day_filter = df[df['time_since_due_date'].str.startswith('7 day')]
     
+    df_day_filter.columns = ['account_code', 'first_name', 'last_name', 'email', 'number', 'tax_region', 'oldest_invoice', 'time_since_due_date',
+                             'active_zendesk_created_date', 'setup_complete']
     df_day_filter = df_day_filter.copy()  # removes futurecopywithwarning (1st copy!)
     df_day_filter.drop(["setup_complete", "oldest_invoice", "account_code", "active_zendesk_created_date", "time_since_due_date"], axis=1, inplace=True)
     df_day_filter['uid'] = df_day_filter['email']
