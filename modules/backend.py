@@ -59,9 +59,8 @@ def process_outreach_one(df):
 
 def process_outreach_two(df):
     df_or_1 = df
-    df_or_1.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
-                       'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
-    df_or_1.drop(0, axis=0, inplace=True)
+    df_or_1.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
+    # df_or_1.drop(0, axis=0, inplace=True)
     df_or_1 = df_or_1[df_or_1.status != "sale"]  # remove rows with sale status  -> remove do not call?
     df_or_1.head()
 

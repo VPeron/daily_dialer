@@ -101,14 +101,20 @@ def outreach_one():
 def outreach_two_and_three():
     with st.container():
         st.title('OUTREACHES 2 & 3')
+        st.warning("""This outreach expects files coming out of Babelforce.\n
+Please ensure you first open the file in a notepad and replace all ';' with a coma ','
+""")
         
         # 1- Select outreach (output file naming purposes only)
         outreach_option = st.selectbox('Chose outreach: ', [None, '2', '3'])
         if outreach_option is not None:
             # 2 - DROP CSV
-            uploaded_file = st.file_uploader("Choose a CSV file", key="OR23")
+            uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key="OR23")
             if uploaded_file is not None:
                 raw_data = pd.read_csv(uploaded_file)
+                
+                # st.write(raw_data)
+                
                 temp_data = process_outreach_two(raw_data)
                 # 3 - VIZ NEW DF
                 st.write(temp_data)
