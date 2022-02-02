@@ -101,34 +101,36 @@ def outreach_one():
 def outreach_two_and_three():
     with st.container():
         st.title('OUTREACHES 2 & 3')
-        st.warning("""This outreach expects files coming out of Babelforce.\n
-Please ensure you first open the file in a notepad and replace all ';' with a coma ','
+        st.info("""This outreach expects files coming out of Babelforce with a semicolon delimiter.\n
 """)
         
         # 1- Select outreach (output file naming purposes only)
         outreach_option = st.selectbox('Chose outreach: ', [None, '2', '3'])
         if outreach_option is not None:
             # 2 - DROP CSV
-            uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key="OR23")
-            if uploaded_file is not None:
-                raw_data = pd.read_csv(uploaded_file)
-                
-                # st.write(raw_data)
-                
-                temp_data = process_outreach_two(raw_data)
-                # 3 - VIZ NEW DF
-                st.write(temp_data)
-                # 4 - CONFIRM
-                confirm_process = st.button('Create file', key='confirm_processing_2')
-                if confirm_process:
-                    # 5 - DOWNLOAD PROCESSED FILE
-                    csv = convert_df(temp_data)
-                    st.download_button(
-                        label="Download data as CSV",
-                        data=csv,
-                        file_name=f'{today_date}_outreach_{outreach_option}.csv',
-                        mime='text/csv',
-                    )
+            try:
+                uploaded_file = st.file_uploader("Choose a CSV file", type='csv', key="OR23")
+                if uploaded_file is not None:
+                    raw_data = pd.read_csv(uploaded_file, sep=';')
+                    
+                    # st.write(raw_data)
+                    
+                    temp_data = process_outreach_two(raw_data)
+                    # 3 - VIZ NEW DF
+                    st.write(temp_data)
+                    # 4 - CONFIRM
+                    confirm_process = st.button('Create file', key='confirm_processing_2')
+                    if confirm_process:
+                        # 5 - DOWNLOAD PROCESSED FILE
+                        csv = convert_df(temp_data)
+                        st.download_button(
+                            label="Download data as CSV",
+                            data=csv,
+                            file_name=f'{today_date}_outreach_{outreach_option}.csv',
+                            mime='text/csv',
+                        )
+            except ValueError:
+                st.error('The file format does not match the requirements.')
     
 
 def contact_page():
@@ -145,8 +147,9 @@ def about_page():
     st.title('About')
     st.info("""Simple UI app to aid file formatting routine.\n
 Outreaches 1, 2 and 3 are available via sidebar menu.
-- Outreach 1 expects a .csv file from MODE where it will filter the respective data for the present day.
-- Outreaches 2 and 3 expect a .csv file from BabelForce containing a status column with the outcome of outreaches 1 and 2, respectively.\n
+- Outreach 1 expects a .csv file from MODE where it will filter the respective data to be used for the current date.
+- Outreaches 2 and 3 expect a file with .csv extension (but with semicolon delimiter) from BabelForce containing a status column with the outcome of outreaches 1 and 2, respectively.\n
+- For all outreaches, a file will be created in your Downloads directory and should be ready to be uploaded into Babelforce.\n
 A contact page is available for any help or suggestions.\n
 Version 1.0\n
 01/02/2022\n
