@@ -54,6 +54,7 @@ def process_outreach_one(df):
     df_day_filter = df_day_filter.drop_duplicates(subset=['number'])
 
     assert df_day_filter.number.nunique() == df_day_filter.email.nunique()
+    st.balloons()
     
     return df_day_filter.reset_index(drop=True)
 
@@ -79,5 +80,6 @@ def process_outreach_two(df):
     # df_or_1.append(df_or_2)
     
     df_or_1 = df_or_1[["uid", "number", "status"]]
+    st.balloons()
     
     return df_or_1

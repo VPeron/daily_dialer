@@ -77,25 +77,29 @@ See About and Contact pages if you need any help.""")
 def outreach_one():
     with st.container():
         st.title('OUTREACH 1')
+        st.info('Please download and feed the unchanged file from MODE - dialer_daily_report-query')
         
-        # 1 - DROP CSV
-        uploaded_file = st.file_uploader("Choose a CSV file", key="OR1")
-        if uploaded_file is not None:
-            raw_data = pd.read_csv(uploaded_file)
-            temp_data = process_outreach_one(raw_data)
-            # 2 - VIZ NEW DF
-            st.write(temp_data)
-            # 3 - CONFIRM
-            confirm_process = st.button('Create file', key='confirm_processing_1')
-            if confirm_process:
-                # 4 - DOWNLOAD PROCESSED FILE
-                csv = convert_df(temp_data)
-                st.download_button(
-                    label="Download data as CSV",
-                    data=csv,
-                    file_name=f'{today_date}_outreach_1.csv',
-                    mime='text/csv',
-                )
+        try:
+            # 1 - DROP CSV
+            uploaded_file = st.file_uploader("Choose a CSV file", key="OR1")
+            if uploaded_file is not None:
+                raw_data = pd.read_csv(uploaded_file)
+                temp_data = process_outreach_one(raw_data)
+                # 2 - VIZ NEW DF
+                st.write(temp_data)
+                # 3 - CONFIRM
+                confirm_process = st.button('Create file', key='confirm_processing_1')
+                if confirm_process:
+                    # 4 - DOWNLOAD PROCESSED FILE
+                    csv = convert_df(temp_data)
+                    st.download_button(
+                        label="Download data as CSV",
+                        data=csv,
+                        file_name=f'{today_date}_outreach_1.csv',
+                        mime='text/csv',
+                    )
+        except ValueError:
+            st.error('The file format does not match the requirements.')
     
 
 def outreach_two_and_three():
@@ -164,7 +168,6 @@ def main():
         "Outreaches 2/3": outreach_two_and_three,
         "About": about_page,
         "Contact": contact_page,
-        
     }
     
     page = st.sidebar.radio("Menu", tuple(pages.keys()))
