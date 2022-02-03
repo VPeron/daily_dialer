@@ -25,7 +25,8 @@ def clean_phone_number(num):
 
 def process_outreach_one(df):
     """
-    Receives 1st file as a dataframe, filters out cut-off dates (cumulative from weekends on monday flow #TODO automate bank holidays) for first contact.
+    Receives 1st file as a dataframe, filters out cut-off dates 
+    (cumulative from weekends on monday flow #TODO automate bank holidays) for first contact.
     
     """
     today_date = datetime.today()
@@ -54,7 +55,7 @@ def process_outreach_one(df):
     region_dict = {}
     for index, region in enumerate(sorted_regions):
         region_dict[region] = index
-    df_day_filter = df_day_filter.copy()  # removes futurecopywithwarning (2nd copy!)
+    df_day_filter = df_day_filter.copy()  # removes futurecopywithwarning (2nd copy...)
     df_day_filter['region_index'] = df_day_filter['tax_region'].map(region_dict)
     df_day_filter.sort_values(by='region_index', axis=0, na_position='first', inplace=True)
     df_day_filter.drop('region_index', axis=1, inplace=True)
@@ -64,13 +65,14 @@ def process_outreach_one(df):
     
     return df_day_filter.reset_index(drop=True)
 
+
 def process_outreach_two(df):
     """
     Remove payments before setting up for next contact.
     """
     df_or_1 = df
-    df_or_1.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
-    # df_or_1.drop(0, axis=0, inplace=True)
+    df_or_1.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
+                       'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_or_1 = df_or_1[df_or_1.status != "sale"]  # also remove do not call?
     df_or_1.head()
     
@@ -78,16 +80,19 @@ def process_outreach_two(df):
     
     return df_or_1
 
+
 def process_pending_or1(df_pending):
-    df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
+    df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
+                          'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_pending = df_pending[df_pending["status"] == 'pending']
-    df_pending = df_pending[["uid", "number", "status"]] # status == pending
+    df_pending = df_pending[["uid", "number", "status"]]
 
     return df_pending
 
 
 def process_pending_or2(df_pending):
-    df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
+    df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
+                          'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_pending = df_pending[df_pending['status'] == 'pending']
     df_pending = df_pending[["uid", "number", "status"]]
     return df_pending
@@ -183,7 +188,8 @@ def multi_file(outreach):
 
 # FRAUD LISTS
 def process_fraud_delinquents(df):
-    df.columns = ['account_code', 'first_name', 'last_name', 'email', 'phone', 'tax_region', 'oldest_invoice', 'time_since_due_date', 'active_zendesk_created_date', 'setup_complete']
+    df.columns = ['account_code', 'first_name', 'last_name', 'email', 'phone', 'tax_region', 'oldest_invoice', 
+                  'time_since_due_date', 'active_zendesk_created_date', 'setup_complete']
     today_date = datetime.today()
     weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
     today = weekDays[today_date.weekday()]
@@ -198,8 +204,8 @@ def process_fraud_delinquents(df):
 
 def process_fraud_payments(df):
     st.warning("""Coming soon.\n
-Use Colab script for payments for now.""")
-
+Use Colab script for payments for now.\n""")
+    
 
 def fraud_files(type):
     st.image("https://mahoneysabol.com/wp-content/uploads/2020/08/Fraud_Blog-Header.jpg")
@@ -217,6 +223,7 @@ def fraud_files(type):
             df = process_fraud_payments(df)
 
         # DOWNLOAD FILE
+        
         process = st.button('Create File', key='done 1 file')
         if process:
             csv = convert_df(df)

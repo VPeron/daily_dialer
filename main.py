@@ -30,7 +30,7 @@ hide_streamlit_style = """
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
-today_date = str(datetime.today())[:10]
+# today_date = str(datetime.today())[:10]
 
 
 def front_door():
@@ -49,8 +49,7 @@ def front_door():
         input_password = placeholder.text_input(' 🔑 :', value='', type='password')
         if input_password:
             if input_password == FRONT_PASSWORD:
-                session_state = True
-                    
+                session_state = True 
                 front_placeholder.empty()
                 placeholder.empty()
                 img_placeholder.empty()
@@ -111,8 +110,8 @@ Outreaches 1, 2 and 3 are available via sidebar menu.
 - For all outreaches, a file will be created in your Downloads directory and should be ready to be uploaded into Babelforce.\n
 - Fraud lists (Coming soon)\n
 A contact page is available for any help or suggestions.\n
-Version 1.0\n
-01/02/2022\n
+Version 1.1\n
+03/02/2022\n
 """)
         
 
