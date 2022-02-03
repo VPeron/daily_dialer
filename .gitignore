@@ -1,3 +1,3 @@
 data/
 *.pyc
-.streamlit/
+.streamlit/secrets.toml

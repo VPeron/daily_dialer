@@ -75,6 +75,10 @@ def multi_file_page():
     st.title("Dunning Outreaches")
     outreach_option = st.selectbox('Select your outreach: ', [None, 1, 2, 3])
     if outreach_option is not None:
+        if outreach_option == 1:
+            st.info("Upload file directly from MODE email.")
+        if outreach_option == 2 or outreach_option == 3:
+            st.info("Upload file directly from Babelforce.")
         multi_file(outreach_option)
     
 

@@ -187,8 +187,5 @@ def fraud_delinquents():
     pass
 
 
-
 def fraud_payments():
     pass
-
-
