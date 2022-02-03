@@ -1,10 +1,13 @@
 import streamlit as st
+import pandas as pd
 from datetime import datetime
 
 
+PRESENT_DAY = str(datetime.today())[:10]
+
 @st.cache
 def convert_df(df):
-     # IMPORTANT: Cache the conversion to prevent computation on every rerun
+     """" IMPORTANT: Cache the conversion to prevent computation on every rerun"""
      return df.to_csv(index=False).encode('utf-8')
 
 
@@ -21,6 +24,10 @@ def clean_phone_number(num):
 
 
 def process_outreach_one(df):
+    """
+    Receives 1st file as a dataframe, filters out cut-off dates (cumulative from weekends on monday flow #TODO automate bank holidays) for first contact.
+    
+    """
     today_date = datetime.today()
     weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
     today = weekDays[today_date.weekday()]
@@ -54,32 +61,134 @@ def process_outreach_one(df):
     df_day_filter = df_day_filter.drop_duplicates(subset=['number'])
 
     assert df_day_filter.number.nunique() == df_day_filter.email.nunique()
-    st.balloons()
     
     return df_day_filter.reset_index(drop=True)
 
 def process_outreach_two(df):
+    """
+    Remove payments before setting up for next contact.
+    """
     df_or_1 = df
     df_or_1.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     # df_or_1.drop(0, axis=0, inplace=True)
-    df_or_1 = df_or_1[df_or_1.status != "sale"]  # remove rows with sale status  -> remove do not call?
+    df_or_1 = df_or_1[df_or_1.status != "sale"]  # also remove do not call?
     df_or_1.head()
-
-    #TODO multiple file flow
-    # if len(file_2) > 0:
-    #     worksheet_2 = gc.open(str(file_2)).sheet1
-    #     data_2 = worksheet_2.get_all_values()
-    # file_2_list = []
-    # for item in data_2:
-    #     for current_row_2 in item:
-    #         file_2_list.append(current_row_2.split(';'))
-    # df_or_2 = pd.DataFrame(file_2_list)
-    # df_or_2.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
-    # df_or_2.drop(0, axis=0, inplace=True)
-    # df_or_2 = df_or_2[df_or_2.status == "pending"]  # keep only rows with pending
-    # df_or_1.append(df_or_2)
     
     df_or_1 = df_or_1[["uid", "number", "status"]]
-    st.balloons()
     
     return df_or_1
+
+def process_pending_or1(df_pending):
+    df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
+    df_pending = df_pending[df_pending["status"] == 'pending']
+    df_pending = df_pending[["uid", "number", "status"]] # status == pending
+
+    return df_pending
+
+
+def process_pending_or2(df_pending):
+    df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
+    df_pending = df_pending[df_pending['status'] == 'pending']
+    df_pending = df_pending[["uid", "number", "status"]]
+    return df_pending
+
+
+
+def multi_file(outreach):
+    """
+    handles all outreaches with the option to merge file data before downloading csv.
+    """
+    but_placeholder = st.empty()
+
+    # FILE 1
+    try:
+        uploaded_file = st.file_uploader("Upload main file", key="main_file")
+        if uploaded_file is not None:
+            if outreach == 1:
+                df = pd.read_csv(uploaded_file)
+                df = process_outreach_one(df)
+            if outreach == 2 or outreach == 3:
+                df = pd.read_csv(uploaded_file, sep=';')
+                df = process_outreach_two(df)
+            st.write(uploaded_file.name)
+            st.write(df)
+            but_placeholder = st.empty()
+
+            process = but_placeholder.button('Create File', key='done 1 file')
+            if process:
+                csv = convert_df(df)
+                st.download_button(
+                    label="Download data as CSV",
+                    data=csv,
+                    file_name=f'{PRESENT_DAY}_outreach_{outreach}.csv',
+                    mime='text/csv',
+                )
+    except KeyError:
+            st.error('The file format does not match the requirements.')
+
+    # FILE 2
+    try:
+        uploaded_file_2 = st.file_uploader("Upload pending outreach from yesterday", key='pendings')
+        if uploaded_file_2 is not None and uploaded_file is not None:
+            df_pending = pd.read_csv(uploaded_file_2, sep=";")
+            if outreach == 1:
+                df_pending = process_pending_or1(df_pending)
+            if outreach == 2 or outreach == 3:
+                df_pending = process_pending_or2(df_pending)
+
+            st.write(uploaded_file_2.name)
+            st.write(df_pending)
+            
+            confirm_merge = but_placeholder.button('Confirm merge', key='merge')
+            if confirm_merge:
+                df = df[['uid', 'number']]
+                df['status'] = 'new'
+                merged_df = df.append(df_pending)
+
+                st.info(f'File Name: {PRESENT_DAY}_outreach_{outreach}.csv')
+                # st.write(merged_df) # expecting bytes obj? can't display table here
+                # DOWNLOAD PROCESSED FILE 1 AND 2 MERGED
+                csv = convert_df(merged_df)
+                st.download_button(
+                    label="Download data as CSV",
+                    data=csv,
+                    file_name=f'{PRESENT_DAY}_outreach_{outreach}.csv',
+                    mime='text/csv',
+                )
+    except ValueError:
+            st.error('The file format does not match the requirements.')
+    
+    # ONLY FILE 2 OPTION
+    try:      
+        if uploaded_file_2 is not None and uploaded_file is None:
+            df_pending_only = pd.read_csv(uploaded_file_2, sep=";")
+            if outreach == 1:
+                df_pending_only = process_pending_or1(df_pending_only)
+            if outreach == 2 or outreach == 3:
+                df_pending_only = process_pending_or2(df_pending_only)
+                
+            st.write(uploaded_file_2.name)
+            st.write(df_pending_only)
+            # DOWNLOAD PROCESSED FILE 2 ONLY
+            process = st.button('Create and download file', key='done only pending')
+            if process:
+                csv = convert_df(df_pending_only)
+                st.download_button(
+                    label="Download data as CSV",
+                    data=csv,
+                    file_name=f'{PRESENT_DAY}_outreach_{outreach}.csv',
+                    mime='text/csv',
+                )
+    except ValueError:
+            st.error('The file format does not match the requirements.')
+
+
+def fraud_delinquents():
+    pass
+
+
+
+def fraud_payments():
+    pass
+
+
