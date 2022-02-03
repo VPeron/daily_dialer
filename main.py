@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import datetime
-from modules.backend import multi_file, fraud_delinquents, fraud_payments
+from modules.backend import multi_file, fraud_files
 
 FRONT_PASSWORD = st.secrets["front_password"]
 EMAIL_CONTACT = st.secrets['email_contact']
@@ -23,7 +23,7 @@ hide_streamlit_style = """
         padding: 5px;
         top: 2px;
     }
-    .st-at {
+    body {
     background-color: ##0E1117;
     }
     </style>
@@ -72,6 +72,9 @@ See About and Contact pages if you need any help.""")
 
 
 def multi_file_page():
+    """
+    Format all dunning outreach files, including multiple files at a time.
+    """
     st.title("Dunning Outreaches")
     outreach_option = st.selectbox('Select your outreach: ', [None, 1, 2, 3])
     if outreach_option is not None:
@@ -82,16 +85,11 @@ def multi_file_page():
         multi_file(outreach_option)
     
 
-def fraud_delinquents_page():
-    fraud_delinquents()
-    st.title('FRAUD DELINQUENTS')
-    st.warning('Coming soon')
-
-
-def fraud_payments_page():
-    fraud_payments()
-    st.title('FRAUD PAYMENTS')
-    st.warning('Coming soon')
+def fraud_lists_page():
+    st.title('FRAUD LISTS')
+    fraud_type = st.selectbox('Select a file to process', ["delinquents", "payments"])
+    if fraud_type is not None:
+        fraud_files(fraud_type)
     
 
 def contact_page():
@@ -111,6 +109,7 @@ Outreaches 1, 2 and 3 are available via sidebar menu.
 - Outreach 1 expects a .csv file from MODE where it will filter the respective data to be used for the current date. This file will be ready to go into Babelforce as Outreach 1.
 - Outreaches 2 and 3 expect a file with .csv extension (but with semicolon delimiter) from BabelForce containing a status column with the outcome of outreaches 1 and 2, respectively.\n
 - For all outreaches, a file will be created in your Downloads directory and should be ready to be uploaded into Babelforce.\n
+- Fraud lists (Coming soon)\n
 A contact page is available for any help or suggestions.\n
 Version 1.0\n
 01/02/2022\n
@@ -122,8 +121,7 @@ def main():
     pages = {
         "Homepage": home_page,
         "Dunning outreaches": multi_file_page,
-        "Blocklist": fraud_delinquents_page,
-        "Late Payments": fraud_payments_page,
+        "Fraud Lists": fraud_lists_page,
         "About": about_page,
         "Contact": contact_page,
     }

@@ -93,7 +93,6 @@ def process_pending_or2(df_pending):
     return df_pending
 
 
-
 def multi_file(outreach):
     """
     handles all outreaches with the option to merge file data before downloading csv.
@@ -144,9 +143,8 @@ def multi_file(outreach):
                 df = df[['uid', 'number']]
                 df['status'] = 'new'
                 merged_df = df.append(df_pending)
-
                 st.info(f'File Name: {PRESENT_DAY}_outreach_{outreach}.csv')
-                # st.write(merged_df) # expecting bytes obj? can't display table here
+                
                 # DOWNLOAD PROCESSED FILE 1 AND 2 MERGED
                 csv = convert_df(merged_df)
                 st.download_button(
@@ -183,9 +181,49 @@ def multi_file(outreach):
             st.error('The file format does not match the requirements.')
 
 
-def fraud_delinquents():
-    pass
+# FRAUD LISTS
+def process_fraud_delinquents(df):
+    df.columns = ['account_code', 'first_name', 'last_name', 'email', 'phone', 'tax_region', 'oldest_invoice', 'time_since_due_date', 'active_zendesk_created_date', 'setup_complete']
+    today_date = datetime.today()
+    weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+    today = weekDays[today_date.weekday()]
+    if today == 'Monday':
+        df_one_day = df[df['time_since_due_date'].str.contains(r"^1 d|^2 d|^3 d")]
+    else:
+        df_one_day = df[df['time_since_due_date'].str.contains('1 day ')]
+    df_one_day = df_one_day['email'].drop_duplicates().reset_index().drop('index', axis=1)
+    
+    return df_one_day
 
 
-def fraud_payments():
-    pass
+def process_fraud_payments(df):
+    st.warning("""Coming soon.\n
+Use Colab script for payments for now.""")
+
+
+def fraud_files(type):
+    st.image("https://mahoneysabol.com/wp-content/uploads/2020/08/Fraud_Blog-Header.jpg")
+    
+    # UPLOAD FILE
+    uploaded_file = st.file_uploader("Upload main file", key="fraud_files")
+    if uploaded_file is not None:
+        if type == 'delinquents':
+            df = pd.read_csv(uploaded_file)
+            df = process_fraud_delinquents(df)
+            st.write(f"{len(df.email)} lines to process.")
+            st.write(df)
+        if type == 'payments':
+            df = pd.read_csv(uploaded_file)
+            df = process_fraud_payments(df)
+
+        # DOWNLOAD FILE
+        process = st.button('Create File', key='done 1 file')
+        if process:
+            csv = convert_df(df)
+            st.download_button(
+                label="Download data as CSV",
+                data=csv,
+                file_name=f'{PRESENT_DAY}_fraud_{type}.csv',
+                mime='text/csv',
+            )
+            st.info(f'{PRESENT_DAY}_fraud_{type}.csv download is ready.')
