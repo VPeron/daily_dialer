@@ -15,7 +15,7 @@ hide_streamlit_style = """
         visibility:hidden;
     }
     footer:after {
-        content: 'Made For Canary ®️';
+        content: 'Daily dialer ®️';
         visibility: visible;
         display: block;
         position: relative;
@@ -41,18 +41,18 @@ def front_door():
     
     with main_col_2:
         front_placeholder = st.empty()
-        img_placeholder = st.empty()
+        # img_placeholder = st.empty()
         front_placeholder.title(' ☘ « ※ » ♠🅲♠ « ※ » ☘')
         ## AUTHENTICATION ##
         placeholder = st.empty()
-        img_placeholder.image('https://cdn.dribbble.com/users/56941/screenshots/1078625/canary_logo_3.png')
+        # img_placeholder.image('https://cdn.dribbble.com/users/56941/screenshots/1078625/canary_logo_3.png')
         input_password = placeholder.text_input(' 🔑 :', value='', type='password')
         if input_password:
             if input_password == FRONT_PASSWORD:
                 session_state = True 
                 front_placeholder.empty()
                 placeholder.empty()
-                img_placeholder.empty()
+                # img_placeholder.empty()
             else:
                 placeholder.image('https://www.how-to-draw-funny-cartoons.com/image-files/cartoon-chair-6.gif')
                 session_state = False
@@ -64,7 +64,7 @@ def front_door():
 
 
 def home_page():
-    st.image('https://smarthomesolver.com/reviews/wp-content/uploads/2016/09/canary_transparent_logo-e1478312785944.png')
+    # st.image('https://smarthomesolver.com/reviews/wp-content/uploads/2016/09/canary_transparent_logo-e1478312785944.png')
     st.title('« ※ » Dialer Files « ※ »')
     st.info("""Select an Outreach or a Fraud list type from the sidebar menu.\n
 See About and Contact pages if you need any help.""")
