@@ -94,7 +94,7 @@ def fraud_lists_page():
 def contact_page():
     st.title('Contact: 📧')
     table_info = {
-        'Email': [EMAIL_CONTACT],
+        'Email': 'viperon.python@gmail.com',#[EMAIL_CONTACT],
         'Github/Source Code': ["https://github.com/VPeron/daily_dialer"],
         
     }
