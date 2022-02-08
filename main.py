@@ -5,7 +5,6 @@ from modules.backend import multi_file, fraud_files
 FRONT_PASSWORD = st.secrets["front_password"]
 EMAIL_CONTACT = st.secrets['email_contact']
 
-
 st.set_page_config(page_title='Daily Dialer', page_icon="☎️", layout='centered')
 
 hide_streamlit_style = """
@@ -29,8 +28,6 @@ hide_streamlit_style = """
     </style>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
-# today_date = str(datetime.today())[:10]
 
 
 def front_door():
@@ -70,7 +67,7 @@ def home_page():
 See About and Contact pages if you need any help.""")
 
 
-def multi_file_page():
+def dunning_page():
     """
     Format all dunning outreach files, including multiple files at a time.
     """
@@ -87,8 +84,10 @@ def multi_file_page():
 def fraud_lists_page():
     st.title('FRAUD LISTS')
     fraud_type = st.selectbox('Select a file to process', ["delinquents", "payments"])
-    if fraud_type is not None:
-        fraud_files(fraud_type)
+    if fraud_type == "delinquents":
+        fraud_files("delinquents")
+    if fraud_type == "payments":
+        fraud_files("payments")
     
 
 def contact_page():
@@ -119,7 +118,7 @@ def main():
     # Register pages
     pages = {
         "Homepage": home_page,
-        "Dunning outreaches": multi_file_page,
+        "Dunning outreaches": dunning_page,
         "Fraud Lists": fraud_lists_page,
         "About": about_page,
         "Contact": contact_page,

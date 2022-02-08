@@ -1,6 +1,8 @@
+from operator import index
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+from io import StringIO
 
 
 PRESENT_DAY = str(datetime.today())[:10]
@@ -203,30 +205,36 @@ def process_fraud_delinquents(df):
 
 
 def process_fraud_payments(df):
-    st.warning("""Coming soon.\n
-Use Colab script for payments for now.\n""")
+    
+    df['billed_date'] = pd.to_datetime(df['billed_date'])
+    df['closed_at'] = pd.to_datetime(df['closed_at'])
+    df["billed_date"] = df["billed_date"].dt.strftime('%Y-%m-%d')
+    df["closed_at"] = df["closed_at"].dt.strftime('%Y-%m-%d %H:%M')
+    df['email'] = df['email'].str.strip()
+    df['email'] = df['email'].drop_duplicates()
+    # df.dropna(inplace=True)
+    return df
     
 
 def fraud_files(type):
     st.image("https://mahoneysabol.com/wp-content/uploads/2020/08/Fraud_Blog-Header.jpg")
     
-    # UPLOAD FILE
-    uploaded_file = st.file_uploader("Upload main file", key="fraud_files")
-    if uploaded_file is not None:
-        if type == 'delinquents':
+    ### DELINQUENTS ###
+    if type == 'delinquents':
+        st.info("""
+                Upload dialer_daily_report directly from MODE.\n
+    If today is Monday, weekend entries will be picked up automatically.""")
+        # UPLOAD FILE
+        uploaded_file = st.file_uploader("Upload dialer_daily_report file", key="fraud_delinquents")
+        if uploaded_file is not None:
             df = pd.read_csv(uploaded_file)
             df = process_fraud_delinquents(df)
             st.write(f"{len(df.email)} lines to process.")
             st.write(df)
-        if type == 'payments':
-            df = pd.read_csv(uploaded_file)
-            df = process_fraud_payments(df)
-
-        # DOWNLOAD FILE
-        
-        process = st.button('Create File', key='done 1 file')
-        if process:
+            # process = st.button('Create File', key='done 1 file')
+            # if process:
             csv = convert_df(df)
+            # DOWNLOAD FILE
             st.download_button(
                 label="Download data as CSV",
                 data=csv,
@@ -234,3 +242,12 @@ def fraud_files(type):
                 mime='text/csv',
             )
             st.info(f'{PRESENT_DAY}_fraud_{type}.csv download is ready.')
+
+    ### PAYMENTS ###
+    if type == 'payments':
+        url = 'https://colab.research.google.com/drive/1GNnG8_KUXQB8wtmGzYYn9KbOzvY8Fy6V#scrollTo=1WFm-0AiolkU'
+        st.markdown(f'<a href="{url}">For payments, use Colab notebook', unsafe_allow_html=True)
+        
+        st.info("""
+                See contact page if you need access to the notebook.
+                """)
