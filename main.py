@@ -1,5 +1,4 @@
 import streamlit as st
-from datetime import datetime
 from modules.backend import multi_file, fraud_files, PRESENT_DAY
 
 FRONT_PASSWORD = st.secrets["front_password"]
@@ -40,7 +39,7 @@ def front_door():
         front_placeholder = st.empty()
         # img_placeholder = st.empty()
         front_placeholder.title(' ☘ « ※ » ♠🅲♠ « ※ » ☘')
-        ## AUTHENTICATION ##
+        ## MINIMAL AUTH ##  
         placeholder = st.empty()
         # img_placeholder.image('https://cdn.dribbble.com/users/56941/screenshots/1078625/canary_logo_3.png')
         input_password = placeholder.text_input(' 🔑 :', value='', type='password')
@@ -96,7 +95,6 @@ def contact_page():
     table_info = {
         'Email': 'viperon.python@gmail.com',#[EMAIL_CONTACT],
         'Github/Source Code': ["https://github.com/VPeron/daily_dialer"],
-        
     }
     st.table(table_info)
     

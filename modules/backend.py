@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import pytz
-# from io import StringIO
 
 
 time_zone = pytz.timezone("Europe/Berlin")
@@ -16,7 +15,7 @@ def convert_df(df):
 
 def clean_phone_number(num):
   '''
-  strips special characters from phone numbers
+  strips special characters from phone numbers with pandas apply
   '''
   numbers = []
   for char in str(num):
@@ -231,8 +230,6 @@ def fraud_files(type):
             df = process_fraud_delinquents(df)
             st.write(f"{len(df.email)} lines to process.")
             st.write(df)
-            # process = st.button('Create File', key='done 1 file')
-            # if process:
             csv = convert_df(df)
             # DOWNLOAD FILE
             st.download_button(
@@ -245,8 +242,9 @@ def fraud_files(type):
 
     ### PAYMENTS ###
     if type == 'payments':
+        st.warning('Under construction.')
         url = 'https://colab.research.google.com/drive/1GNnG8_KUXQB8wtmGzYYn9KbOzvY8Fy6V#scrollTo=1WFm-0AiolkU'
-        st.markdown(f'<a href="{url}">For payments, use Colab notebook', unsafe_allow_html=True)
+        st.markdown(f'<a href="{url}">For now, please use Colab notebook for payments', unsafe_allow_html=True)
         
         st.info("""
                 See contact page if you need access to the notebook.
