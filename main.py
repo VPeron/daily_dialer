@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import datetime
-from modules.backend import multi_file, fraud_files
+from modules.backend import multi_file, fraud_files, PRESENT_DAY
 
 FRONT_PASSWORD = st.secrets["front_password"]
 EMAIL_CONTACT = st.secrets['email_contact']
@@ -65,13 +65,14 @@ def home_page():
     st.title('« ※ » Dialer Files « ※ »')
     st.info("""Select an Outreach or a Fraud list type from the sidebar menu.\n
 See About and Contact pages if you need any help.""")
-
+    
 
 def dunning_page():
     """
     Format all dunning outreach files, including multiple files at a time.
     """
     st.title("Dunning Outreaches")
+    st.write(F"DATE: {PRESENT_DAY}")
     outreach_option = st.selectbox('Select your outreach: ', [None, 1, 2, 3])
     if outreach_option is not None:
         if outreach_option == 1:

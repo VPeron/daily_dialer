@@ -1,11 +1,12 @@
-from operator import index
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from io import StringIO
+import pytz
+# from io import StringIO
 
 
-PRESENT_DAY = str(datetime.today())[:10]
+time_zone = pytz.timezone("Europe/Berlin")
+PRESENT_DAY = str(datetime.now(tz=time_zone))[:10]
 
 @st.cache
 def convert_df(df):
@@ -77,7 +78,6 @@ def process_outreach_two(df):
                        'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_or_1 = df_or_1[df_or_1.status != "sale"]  # also remove do not call?
     df_or_1.head()
-    
     df_or_1 = df_or_1[["uid", "number", "status"]]
     
     return df_or_1
@@ -97,6 +97,7 @@ def process_pending_or2(df_pending):
                           'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_pending = df_pending[df_pending['status'] == 'pending']
     df_pending = df_pending[["uid", "number", "status"]]
+    
     return df_pending
 
 
@@ -119,9 +120,9 @@ def multi_file(outreach):
             st.write(uploaded_file.name)
             st.write(df)
             but_placeholder = st.empty()
-
             process = but_placeholder.button('Create File', key='done 1 file')
             if process:
+                # DOWNLOAD
                 csv = convert_df(df)
                 st.download_button(
                     label="Download data as CSV",
@@ -205,7 +206,6 @@ def process_fraud_delinquents(df):
 
 
 def process_fraud_payments(df):
-    
     df['billed_date'] = pd.to_datetime(df['billed_date'])
     df['closed_at'] = pd.to_datetime(df['closed_at'])
     df["billed_date"] = df["billed_date"].dt.strftime('%Y-%m-%d')
