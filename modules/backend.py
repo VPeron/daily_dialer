@@ -5,7 +5,8 @@ import pytz
 
 
 time_zone = pytz.timezone("Europe/Berlin")
-PRESENT_DAY = str(datetime.now(tz=time_zone))[:10]
+current_date = datetime.now(tz=time_zone)
+PRESENT_DAY = str(current_date)[:10]
 
 @st.cache
 def convert_df(df):
@@ -15,7 +16,7 @@ def convert_df(df):
 
 def clean_phone_number(num):
   '''
-  strips special characters from phone numbers with pandas apply
+  strips special characters from phone numbers
   '''
   numbers = []
   for char in str(num):
@@ -83,6 +84,9 @@ def process_outreach_two(df):
 
 
 def process_pending_or1(df_pending):
+    """
+    optional file to be filtered and merged.
+    """
     df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
                           'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_pending = df_pending[df_pending["status"] == 'pending']
@@ -92,6 +96,9 @@ def process_pending_or1(df_pending):
 
 
 def process_pending_or2(df_pending):
+    """
+    optional file to be filtered and merged.
+    """
     df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
                           'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_pending = df_pending[df_pending['status'] == 'pending']
@@ -190,6 +197,9 @@ def multi_file(outreach):
 
 # FRAUD LISTS
 def process_fraud_delinquents(df):
+    """
+    process MODE delinquents file
+    """
     df.columns = ['account_code', 'first_name', 'last_name', 'email', 'phone', 'tax_region', 'oldest_invoice', 
                   'time_since_due_date', 'active_zendesk_created_date', 'setup_complete']
     today_date = datetime.today()
@@ -205,6 +215,9 @@ def process_fraud_delinquents(df):
 
 
 def process_fraud_payments(df):
+    """
+    process MODE payments file
+    """
     df['billed_date'] = pd.to_datetime(df['billed_date'])
     df['closed_at'] = pd.to_datetime(df['closed_at'])
     df["billed_date"] = df["billed_date"].dt.strftime('%Y-%m-%d')
@@ -216,6 +229,9 @@ def process_fraud_payments(df):
     
 
 def fraud_files(type):
+    """
+    file widgets, upload and download
+    """
     st.image("https://mahoneysabol.com/wp-content/uploads/2020/08/Fraud_Blog-Header.jpg")
     
     ### DELINQUENTS ###

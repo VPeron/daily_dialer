@@ -1,6 +1,6 @@
-# Canary - daily dialer
+# Daily dialer
 
 Simple UI app to aid file formatting routine.
 outreach 1, 2 and 3 are available via dropdown menu.
 A contact page is available for any help or suggestions.
-Fraud lists are starting to be implemented.
+Fraud lists - Delinquents are active, Payments needs work.

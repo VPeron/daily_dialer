@@ -1,8 +1,8 @@
 import streamlit as st
-from modules.backend import multi_file, fraud_files, PRESENT_DAY
+from modules.backend import multi_file, fraud_files
 
 FRONT_PASSWORD = st.secrets["front_password"]
-EMAIL_CONTACT = st.secrets['email_contact']
+# EMAIL_CONTACT = st.secrets['email_contact']
 
 st.set_page_config(page_title='Daily Dialer', page_icon="☎️", layout='centered')
 
@@ -20,9 +20,6 @@ hide_streamlit_style = """
         #background-color: red;
         padding: 5px;
         top: 2px;
-    }
-    body {
-    background-color: ##0E1117;
     }
     </style>
 """
@@ -71,7 +68,6 @@ def dunning_page():
     Format all dunning outreach files, including multiple files at a time.
     """
     st.title("Dunning Outreaches")
-    st.write(F"DATE: {PRESENT_DAY}")
     outreach_option = st.selectbox('Select your outreach: ', [None, 1, 2, 3])
     if outreach_option is not None:
         if outreach_option == 1:
@@ -101,15 +97,20 @@ def contact_page():
     
 def about_page():
     st.title('About')
-    st.info("""Simple UI app to aid file formatting routine.\n
+    st.info("""
+This an UI app to aid file formatting routine.\n
+DUNNING\n
 Outreaches 1, 2 and 3 are available via sidebar menu.
 - Outreach 1 expects a .csv file from MODE where it will filter the respective data to be used for the current date. This file will be ready to go into Babelforce as Outreach 1.
 - Outreaches 2 and 3 expect a file with .csv extension (but with semicolon delimiter) from BabelForce containing a status column with the outcome of outreaches 1 and 2, respectively.\n
 - For all outreaches, a file will be created in your Downloads directory and should be ready to be uploaded into Babelforce.\n
-- Fraud lists (Coming soon)\n
+FRAUD LISTS\n
+- Delinquents option is available here and expects a csv file directly from MODE.\n
+- For Payments, please use the Colab notebook for now.\n
 A contact page is available for any help or suggestions.\n
-Version 1.1\n
-03/02/2022\n
+\n
+Version 1.2\n
+17/02/2022\n
 """)
         
 
