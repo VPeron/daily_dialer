@@ -114,7 +114,7 @@ Version 1.2\n
 """)
     ballons = st.button('Try me')
     if ballons:
-        st.ballons()
+        st.balloons()
         
 
 def main():
