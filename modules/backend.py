@@ -89,7 +89,7 @@ def process_pending_or1(df_pending):
     """
     df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
                           'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
-    df_pending = df_pending[df_pending["status"] == 'pending']
+    df_pending = df_pending[df_pending["status"] == 'new']
     df_pending = df_pending[["uid", "number", "status"]]
 
     return df_pending
@@ -101,7 +101,7 @@ def process_pending_or2(df_pending):
     """
     df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
                           'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
-    df_pending = df_pending[df_pending['status'] == 'pending']
+    df_pending = df_pending[df_pending['status'] == 'new']
     df_pending = df_pending[["uid", "number", "status"]]
     
     return df_pending
