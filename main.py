@@ -112,6 +112,9 @@ A contact page is available for any help or suggestions.\n
 Version 1.2\n
 17/02/2022\n
 """)
+    ballons = st.button('Try me')
+    if ballons:
+        st.ballons()
         
 
 def main():
