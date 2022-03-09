@@ -4,9 +4,12 @@ from datetime import datetime
 import pytz
 
 
-time_zone = pytz.timezone("Europe/Berlin")
-current_date = datetime.now(tz=time_zone)
-PRESENT_DAY = str(current_date)[:10]
+def get_current_date():
+    time_zone = pytz.timezone("Europe/Berlin")
+    current_date = datetime.now(tz=time_zone)
+    present_day = str(current_date)[:10]
+    return present_day
+    
 
 @st.cache
 def convert_df(df):
@@ -113,6 +116,7 @@ def multi_file(outreach):
     """
     but_placeholder = st.empty()
 
+    present_day = get_current_date()
     # FILE 1
     try:
         uploaded_file = st.file_uploader("Upload main file", key="main_file")
@@ -133,7 +137,7 @@ def multi_file(outreach):
                 st.download_button(
                     label="Download data as CSV",
                     data=csv,
-                    file_name=f'{PRESENT_DAY}_outreach_{outreach}.csv',
+                    file_name=f'{present_day}_outreach_{outreach}.csv',
                     mime='text/csv',
                 )
     except KeyError:
@@ -157,14 +161,14 @@ def multi_file(outreach):
                 df = df[['uid', 'number']]
                 df['status'] = 'new'
                 merged_df = df.append(df_pending)
-                st.info(f'File Name: {PRESENT_DAY}_outreach_{outreach}.csv')
+                st.info(f'File Name: {present_day}_outreach_{outreach}.csv')
                 
                 # DOWNLOAD PROCESSED FILE 1 AND 2 MERGED
                 csv = convert_df(merged_df)
                 st.download_button(
                     label="Download data as CSV",
                     data=csv,
-                    file_name=f'{PRESENT_DAY}_outreach_{outreach}.csv',
+                    file_name=f'{present_day}_outreach_{outreach}.csv',
                     mime='text/csv',
                 )
     except ValueError:
@@ -188,7 +192,7 @@ def multi_file(outreach):
                 st.download_button(
                     label="Download data as CSV",
                     data=csv,
-                    file_name=f'{PRESENT_DAY}_outreach_{outreach}.csv',
+                    file_name=f'{present_day}_outreach_{outreach}.csv',
                     mime='text/csv',
                 )
     except ValueError:
@@ -234,6 +238,8 @@ def fraud_files(type):
     """
     st.image("https://mahoneysabol.com/wp-content/uploads/2020/08/Fraud_Blog-Header.jpg")
     
+    present_day = get_current_date()
+    
     ### DELINQUENTS ###
     if type == 'delinquents':
         st.info("""
@@ -251,10 +257,10 @@ def fraud_files(type):
             st.download_button(
                 label="Download data as CSV",
                 data=csv,
-                file_name=f'{PRESENT_DAY}_fraud_{type}.csv',
+                file_name=f'{present_day}_fraud_{type}.csv',
                 mime='text/csv',
             )
-            st.info(f'{PRESENT_DAY}_fraud_{type}.csv download is ready.')
+            st.info(f'{present_day}_fraud_{type}.csv download is ready.')
 
     ### PAYMENTS ###
     if type == 'payments':
