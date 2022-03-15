@@ -1,14 +1,18 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-import pytz
+# import pytz
 
 
 def get_current_date():
-    time_zone = pytz.timezone("Europe/Berlin")
-    current_date = datetime.now(tz=time_zone)
-    present_day = str(current_date)[:10]
-    return present_day
+    """Get localized date for sequential file name string generation"""
+    # time_zone = pytz.timezone("Europe/Berlin")
+    # current_date = datetime.now(tz=time_zone)
+    date_today = str(datetime.now())[:10]
+    
+    return date_today
+    # present_day = str(current_date)[:10]
+    # return present_day
     
 
 @st.cache
