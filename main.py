@@ -106,11 +106,11 @@ Outreaches 1, 2 and 3 are available via sidebar menu.
 - For all outreaches, a file will be created in your Downloads directory and should be ready to be uploaded into Babelforce.\n
 FRAUD LISTS\n
 - Delinquents option is available here and expects a csv file directly from MODE.\n
-- For Payments, please use the Colab notebook for now.\n
+- Payments can be processed here or using the Colab notebook. No automatic Monday flow here. \n
 A contact page is available for any help or suggestions.\n
 \n
-Version 1.2\n
-17/02/2022\n
+Version 1.3\n
+15/03/2022\n
 """)
     ballons = st.button('Try me')
     if ballons:

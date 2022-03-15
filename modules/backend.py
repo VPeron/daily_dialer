@@ -232,7 +232,7 @@ def process_fraud_payments(df):
     df["closed_at"] = df["closed_at"].dt.strftime('%Y-%m-%d %H:%M')
     df['email'] = df['email'].str.strip()
     df['email'] = df['email'].drop_duplicates()
-    # df.dropna(inplace=True)
+    df.dropna(inplace=True)
     return df
     
 
@@ -268,10 +268,29 @@ def fraud_files(type):
 
     ### PAYMENTS ###
     if type == 'payments':
-        st.warning('Under construction.')
-        url = 'https://colab.research.google.com/drive/1GNnG8_KUXQB8wtmGzYYn9KbOzvY8Fy6V#scrollTo=1WFm-0AiolkU'
-        st.markdown(f'<a href="{url}">For now, please use Colab notebook for payments', unsafe_allow_html=True)
+        st.warning("If you need to process multiple files at once, i.e: Mondays, merge the files manually before uploading.")
         
-        st.info("""
-                See contact page if you need access to the notebook.
-                """)
+        uploaded_file = st.file_uploader("Upload dialer_daily_payments file", key="delinquent_payments")
+        if uploaded_file is not None:
+            df = pd.read_csv(uploaded_file)
+            df = process_fraud_payments(df)
+            st.write(f"{len(df.email)} lines to process.")
+            st.write(df)
+            csv = convert_df(df)
+            # DOWNLOAD FILE
+            st.download_button(
+                label="Download data as CSV",
+                data=csv,
+                file_name=f'{present_day}_{type}.csv',
+                mime='text/csv',
+            )
+            st.info(f'{present_day}_{type}.csv download is ready.')
+        
+        notebook = st.checkbox('Colab Notebook')
+        if notebook:
+            url = 'https://colab.research.google.com/drive/1GNnG8_KUXQB8wtmGzYYn9KbOzvY8Fy6V#scrollTo=1WFm-0AiolkU'
+            st.markdown(f'<a href="{url}">You can also use Colab notebook for payments, if you have access to it.', unsafe_allow_html=True)
+            
+            st.info("""
+                    See contact page if you need access to the notebook and prefer it.
+                    """)
