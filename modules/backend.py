@@ -1,18 +1,12 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-# import pytz
 
 
 def get_current_date():
-    """Get localized date for sequential file name string generation"""
-    # time_zone = pytz.timezone("Europe/Berlin")
-    # current_date = datetime.now(tz=time_zone)
+    """Get date string for sequential file name generation"""
     date_today = str(datetime.now())[:10]
-    
     return date_today
-    # present_day = str(current_date)[:10]
-    # return present_day
     
 
 @st.cache
@@ -39,6 +33,7 @@ def process_outreach_one(df):
     (cumulative from weekends on monday flow #TODO automate bank holidays) for first contact.
     
     """
+    #TODO assert phone number is complete
     today_date = datetime.today()
     weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
     today = weekDays[today_date.weekday()]
