@@ -281,11 +281,11 @@ def fraud_files(type):
             )
             st.info(f'{present_day}_{type}.csv download is ready.')
         
-        notebook = st.checkbox('Colab Notebook')
-        if notebook:
-            url = 'https://colab.research.google.com/drive/1GNnG8_KUXQB8wtmGzYYn9KbOzvY8Fy6V#scrollTo=1WFm-0AiolkU'
-            st.markdown(f'<a href="{url}">You can also use Colab notebook for payments, if you have access to it.', unsafe_allow_html=True)
+        # notebook = st.checkbox('Colab Notebook')
+        # if notebook:
+        #     url = 'https://colab.research.google.com/drive/1GNnG8_KUXQB8wtmGzYYn9KbOzvY8Fy6V#scrollTo=1WFm-0AiolkU'
+        #     st.markdown(f'<a href="{url}">You can also use Colab notebook for payments, if you have access to it.', unsafe_allow_html=True)
             
-            st.info("""
-                    See contact page if you need access to the notebook and prefer it.
-                    """)
+        #     st.info("""
+        #             See contact page if you need access to the notebook and prefer it.
+        #             """)
