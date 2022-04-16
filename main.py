@@ -1,4 +1,5 @@
 import streamlit as st
+import logging
 from modules.backend import multi_file, fraud_files
 
 FRONT_PASSWORD = st.secrets["front_password"]
@@ -48,6 +49,7 @@ def front_door():
                 # img_placeholder.empty()
             else:
                 placeholder.image('https://www.how-to-draw-funny-cartoons.com/image-files/cartoon-chair-6.gif')
+                logging.warning('Failed login attempt.')
                 session_state = False
                 st.stop()
         
