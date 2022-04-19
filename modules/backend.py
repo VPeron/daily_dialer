@@ -208,8 +208,8 @@ def process_fraud_delinquents(df):
     today_date = datetime.today()
     weekDays = ("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
     today = weekDays[today_date.weekday()]
-    if today == 'Tuesday':
-        df_one_day = df[df['time_since_due_date'].str.contains(r"^1 d|^2 d|^3 d|^4 d")]
+    if today == 'Monday':
+        df_one_day = df[df['time_since_due_date'].str.contains(r"^1 d|^2 d|^3 d")]
     else:
         df_one_day = df[df['time_since_due_date'].str.contains('1 day ')]
     df_one_day = df_one_day['email'].drop_duplicates().reset_index().drop('index', axis=1)
