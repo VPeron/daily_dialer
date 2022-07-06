@@ -76,11 +76,12 @@ def process_outreach_two(df):
     Remove payments before setting up for next contact.
     """
     df_or_1 = df
-    df_or_1.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
-                       'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
-    df_or_1 = df_or_1[df_or_1.status != "sale"]  # also remove do not call?
-    df_or_1.head()
+    # df_or_1.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
+    #                    'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_or_1 = df_or_1[["uid", "number", "status"]]
+    df_or_1 = df_or_1[df_or_1.status != "sale"]  # also remove do not call?
+    #df_or_1.head()
+    
     
     return df_or_1
 
@@ -89,10 +90,11 @@ def process_pending_or1(df_pending):
     """
     optional file to be filtered and merged.
     """
-    df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
-                          'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
-    df_pending = df_pending[df_pending["status"] == 'new']
+    #df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
+                        #   'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_pending = df_pending[["uid", "number", "status"]]
+    df_pending = df_pending[df_pending["status"] == 'new']
+    
 
     return df_pending
 
@@ -101,10 +103,11 @@ def process_pending_or2(df_pending):
     """
     optional file to be filtered and merged.
     """
-    df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
-                          'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
-    df_pending = df_pending[df_pending['status'] == 'new']
+    # df_pending.columns = ['id', 'campaignId', 'listId', 'uid', 'number', 'status', 'dateCreated', 
+    #                       'lastUpdated', 'dateCalled', 'callCount', 'duration', 'calledSinceReset', 'rank', 'data', '_url']
     df_pending = df_pending[["uid", "number", "status"]]
+    df_pending = df_pending[df_pending['status'] == 'new']
+    
     
     return df_pending
 
